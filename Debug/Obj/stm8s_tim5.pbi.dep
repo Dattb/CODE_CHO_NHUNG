@@ -1,0 +1,23 @@
+stm8s_tim5.pbi: \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\intrinsics.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_wwdg.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_uart1.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_tim4.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_tim2.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_tim1.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_spi.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_rst.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_iwdg.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_itc.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_i2c.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_gpio.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_flash.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_exti.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_clk.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_beep.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_awu.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_adc1.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\User\stm8s_conf.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\inc\stm8s_tim5.h \
+  F:\Driver_2Com\STM8\My_Project\Flash\Lib\src\stm8s_tim5.c
