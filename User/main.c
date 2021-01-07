@@ -27,7 +27,6 @@ uint16_t Time_out;
 
 #define BUTTON_PORT           (GPIOC)                // nut an de dieu khien cac hieu ung la PC5
 #define BUTTON_PIN            (GPIO_PIN_5)           // nut an de dieu khien cac hieu ung la PC5
-unsigned char chuoi[1] ={0};
 #define RGB_OUTPUT_PORT       (GPIOA)                // chan dau ra dieu khien cac hieu ung la PA3
 #define RGB_OUTPUT_PIN        (GPIO_PIN_3)           // chan dau ra dieu khien cac hieu ung la PA3
 BitStatus change_mode;
@@ -40,7 +39,7 @@ unsigned char Effect_save;
 void UpdateMode(void);
 void UpdateMode1(void);
 void GPIO_Config(void);
-void time_out_mode(unsigned char mode);
+//void time_out_mode(unsigned char mode);
 static void CLK_Config(void); 
 static void TIM2_Config(void);
 void LED_MODE (unsigned char Mode);
@@ -53,9 +52,8 @@ void Zero_cnt();
     uint16_t add = 0x00;
 void main(void)
 { 
-    chuoi[0]=1;
-    CLK_Config(); // cau hinh CLOCK 
 
+    CLK_Config(); // cau hinh CLOCK 
     TIM2_Config(); // cau hinh timer2 
     GPIO_Config();// cau hinh GPIO
 
@@ -73,7 +71,7 @@ void main(void)
     {
       //LED_MODE (mode_effect);
       RGB_Clear_LED ();
-      RGB_C1_C2();
+//      RGB_C1_C2();
       rgb_SendArray();
       delay_100us();
       delay_100us();
@@ -87,6 +85,9 @@ void main(void)
     {
 //       Time_out++;     
        LED_MODE (mode_effect);
+       // effect_10();
+      // effect_8(6);
+         //effect_();
        if(Effect_save!=mode_effect) 
        {
          FLASH_Unlock(FLASH_MEMTYPE_DATA);                      // mo khoa EEPROM
@@ -98,7 +99,6 @@ void main(void)
         FLASH_ProgramByte( (add+2) ,NumRW); // ghi so lan ghi xoa vao EEPROM
         Effect_save=mode_effect;
        }
-
     }
 }
 
@@ -133,48 +133,30 @@ static void TIM2_Config(void)
   
   
 }
-void time_out_mode(unsigned char Mode)
-{
-  if (Mode==1) Time_out+=140;
-  else if(Mode==3||Mode==2) Time_out+=30;
-  //else if(Mode==6) Time_out+=40;
-  else  Time_out+=20;
-}
+//void time_out_mode(unsigned char Mode)
+//{
+//  if (Mode==1) Time_out+=140;
+//  else if(Mode==3||Mode==2) Time_out+=30;
+//  //else if(Mode==6) Time_out+=40;
+//  else  Time_out+=20;
+//}
 void LED_MODE (unsigned char Mode)
 {
-        if(Mode>7)
+      if(Mode>5)  Mode = mode_effect=1;  
+      switch(Mode)
       {
-        Mode =1;  
+        case 1:  { effect_1(); break;}
+        case 2:  { effect_2(); break;}
+        case 3:  { effect_3(); break;}
+        case 4:  { effect_4(); break;}
+        case 5:  { effect_5(); break;}
+        case 6:  { effect_6(); break;}
+        case 7:  { effect_7(); break;}
+        case 8:  { effect_8(6); break;}
+        case 9:  { effect_9(5); break;}
+        case 10: { effect_10(); break;}
+        case 11: { effect_11(); break;}
       }
-      else if(Mode ==1) 
-      {
-        effect_1();  // hieu ung 1
-      }
-      else if(Mode ==2) 
-      {
-        effect_2();  // hieu ung 2
-      }
-      else if(Mode ==3) 
-      {
-        effect_3();  // hieu ung 3
-      }
-      else if(Mode ==4 ) 
-      {
-        effect_4();  // hieu ung 4
-      }
-      else if(Mode==5)
-      {
-        effect_5();  // hieu ung 5
-      }
-      else if(Mode==6)
-      {
-        effect_6();  // hieu ung 6
-      }
-      else if(Mode==7)
-      {
-        effect_7();  // hieu ung 7
-      }
-
 }
 
 void UpdateMode1(void) // ham cap nhat hieu ung hien tai vao EEPROM
@@ -200,13 +182,13 @@ void UpdateMode1(void) // ham cap nhat hieu ung hien tai vao EEPROM
     FLASH_EraseByte(add);   // xoa dia chi EEPROM
       unsigned char save_mode;
     save_mode=mode_effect-1;      // tang hieu ung 
-    if(save_mode > 7)   // neu hieu ung vuot qua 7 thi xoa hieu ung
+    if(save_mode > 11)   // neu hieu ung vuot qua 7 thi xoa hieu ung
     {
       save_mode =1;
     }
         if(save_mode < 1)   // neu hieu ung vuot qua 7 thi xoa hieu ung
     {
-      save_mode =7;
+      save_mode =11;
     }
     //mode_effect_save1=mode_effect;
     FLASH_ProgramByte(add,save_mode);  // ghi gia tri cua hieu ung sau khi cong vao EEPROM
@@ -250,7 +232,7 @@ void UpdateMode(void) // ham cap nhat hieu ung hien tai vao EEPROM
 //    Program complement value (of previous read byte) at previous address
     FLASH_EraseByte(add);   // xoa dia chi EEPROM
     mode_effect += 1;      // tang hieu ung 
-    if(mode_effect > 7)   // neu hieu ung vuot qua 7 thi xoa hieu ung
+    if(mode_effect > 11)   // neu hieu ung vuot qua 7 thi xoa hieu ung
     {
       mode_effect =1;
     }

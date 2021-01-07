@@ -10,9 +10,6 @@
 
 
 //const RGBColor_t RED = {0,255,0,0};
-const RGBColor_t VIOLET = {0,200,0,80};
-const RGBColor_t VIOLET_WHITE = {255,200,0,80};
-const RGBColor_t RED7_BLUE_3 = {0,255,0,110};
 #define CURRENT_C1_C2     8
 #define NB_LEDS 61                 // so luong led dieu khien la 71 nhung thuc the chi dung 60 LED (5 m)
 unsigned char LedsArray[NB_LEDS*4+CURRENT_C1_C2]; // khai bao mang voi so luong byte du lieu can dung de truyen data cho so led = so led x 4 (do 4 kenh mau)
@@ -73,17 +70,56 @@ inline void ShowLED (void) // ham nay de show led trong effect 7
 }
 
 void effect_7 (){
-  Settup_status_11;
-    effect1_cnt++; // hieu ung 1 counter
+  chedo_save=mode_effect;   // luu lai gia tri cua hieu ung
+  
+  CheckDone = 0;    // kiem tra da gui het data cua hieu ung chua
+     for(unsigned char i=0;i<60;i++)  rgb_SetColor(i,0,255-i*4,i*2,i*4); 
+     
+     
+//           for(unsigned char i=0;i<10;i++)
+//      { 
+//        rgb_SetColor(i,0,255,i*25,0);
+//        rgb_SetColor(i+10,0,255-i*25,255,0);
+//        rgb_SetColor(i+20,0,0,255,i*25);
+//        rgb_SetColor(i+30,0,0,255-i*25,255);
+//        rgb_SetColor(i+40,0,i*25,0,255);
+//        rgb_SetColor(i+50,0,255,0,255-i*25);
+//      } 
+     
+  LEDTempEndPoint  = (RGBColor_t *)(LedsArray + 240+CURRENT_C1_C2);
+  LEDTempLastPoint = (RGBColor_t *)(LedsArray + 236+CURRENT_C1_C2);
 
-      for(int i=0;i<60;i++)
-      { 
-        if(i%2==0){
-      rgb_SetColor(i,0,255,0,0);
-        }
-        else       rgb_SetColor(i,0,0,0,255);
-      } 
-              RGB_Show_LED(10); 
+  while(!CheckDone){  // kiem tra neu chua truyen xong 
+      if(chedo_save==mode_effect) // kiem tra neu hieu ung bi thay doi
+      {
+//        if(!GPIO_ReadInputPin(GPIOC,GPIO_PIN_5)) // kiem tra nut an PC5
+//        {
+//          while(!GPIO_ReadInputPin(GPIOC,GPIO_PIN_5)); // neu van giu nut
+//          mode_effect=1;  // hieu ung =1
+//        }
+    LEDTempBeginPoint = (RGBColor_t *)(LedsArray+CURRENT_C1_C2);
+    while(!(*LEDTempLastPoint).W){
+      LEDTempRunPoint = LEDTempLastPoint;
+      while(LEDTempBeginPoint != LEDTempRunPoint){
+        *(LEDTempRunPoint) = *(LEDTempRunPoint-1);
+        LEDTempRunPoint--;
+        //if(Time_out>=200) break;
+      }
+      delay(1000);
+      ShowLED();
+      //if(Time_out>=200) break;
+    }
+    
+    LEDTempLastPoint--;
+    
+    
+    if(LEDTempBeginPoint == LEDTempLastPoint){
+      CheckDone = 1;
+    }
+  }else break;
+  //if(Time_out>=200) break;
+  }
+  
 }
 
 
@@ -92,75 +128,60 @@ void effect_7 (){
    
 void effect_1 () 
 { 
-  
-  
-    Settup_status_11;
+  Settup_status_11;
     effect1_cnt++; // hieu ung 1 counter
 
       for(int i=0;i<60;i++)
-      { 
-      rgb_SetColor(i,0,0,0,255);
+      {
+      rgb_SetColor(i,0,255,0,);
       } 
-              RGB_Show_LED(5); 
-  
- 
+              RGB_Show_LED(20); 
+    } else  effect1_cnt=0;
 }
 
 void effect_2 ()
-{ 
-
-
-    Settup_status_11;
-    effect1_cnt++; // hieu ung 1 counter
-
-      for(int i=0;i<60;i++)
+{   
+   if(!Settup_status_2)  // settup du lieu cho lan dau 
+   { 
+     Settup_status_11 =0;
+      for(unsigned char i=0;i<10;i++)
       { 
-        rgb_SetColor(i,34,255,0,120); // 2 trang/15 do/7 xanh
+        rgb_SetColor(i,0,255,i*25,0);
+        rgb_SetColor(i+10,0,255-i*25,255,0);
+        rgb_SetColor(i+20,0,0,255,i*25);
+        rgb_SetColor(i+30,0,0,255-i*25,255);
+        rgb_SetColor(i+40,0,i*25,0,255);
+        rgb_SetColor(i+50,0,255,0,255-i*25);
       } 
-      RGB_Show_LED(5); 
-
-  
-// Settup_status_11;
-//    effect1_cnt++; // hieu ung 1 counter
-//
-//      for(int i=0;i<60;i++)
-//      { 
-//        if(i%2==0){
-//      rgb_SetColor(i,0,200,0,80);
-//        }
-//        else       rgb_SetColor(i,255,200,0,80);
-//      } 
-//              RGB_Show_LED(5); 
+      Settup_status_2=1;
+   }
+   RGB_Shift_LED_forward(60,10); // tu du lieu settup ben tren dich tung led (4 byte) trong mang LedsArray theo chieu thuan
 }
 
 
 void effect_3 ()
 {
-  
-  Settup_status_11;
-  effect1_cnt++; // hieu ung 1 counter
-
-  for(int i=0;i<60;i++)
-  { 
-      rgb_SetColor(i,0,255,0,26);  // 10 do/ 1 xanh
-  } 
-  RGB_Show_LED(5); 
-  
-  
-  
-// Settup_status_11;
-//    effect1_cnt++; // hieu ung 1 counter
-//
-//      for(int i=0;i<60;i++)
-//      { 
-//        if(i%2==0){
-//      rgb_SetColor(i,0,255,0,0);
-//        }
-//        else       rgb_SetColor(i,0,0,0,255);
-//      } 
-//              RGB_Show_LED(5); 
+  if(!Settup_status_3)     // settup du lieu cho lan dau 
+  {
+    for(unsigned char i=0;i<5;i++)
+    { 
+      rgb_SetColor(i,0,255,i*50,0);
+      rgb_SetColor(i+5,0,0,0,0);
+      rgb_SetColor(i+10,0,255-i*50,255,0);
+      rgb_SetColor(i+15,0,0,0,0);
+      rgb_SetColor(i+20,0,0,255,i*50);
+      rgb_SetColor(i+25,0,0,0,0);
+      rgb_SetColor(i+30,0,0,255-i*50,255);
+      rgb_SetColor(i+35,0,0,0,0);
+      rgb_SetColor(i+40,0,i*50,0,255);
+      rgb_SetColor(i+45,0,0,0,0);
+      rgb_SetColor(i+50,0,255,0,255-i*50);
+      rgb_SetColor(i+55,0,0,0,0);
+    } 
+    Settup_status_3=1;
+  }
+  RGB_Shift_LED_forward(60,10);        // tu du lieu settup ben tren dich tung led (4 byte) trong mang LedsArray theo chieu thuan
 }
-
 u8     mode_8_cnt=1;
 u8 j=0;
 
@@ -388,21 +409,86 @@ void effect_11 ()
 //
 //}
 void effect_4 ()
-{
-      for(int i=0;i<60;i++)
-      { 
-        rgb_SetColor(i,0,255,0,14); // 19 do/ 1 xanh
-      } 
-              RGB_Show_LED(5); 
+{  
+
+    //for(unsigned char i=0;i<63;i++)
+  if(effect4_cnt<63)  // vua dich led vua gui du lieu ra
+    {    
+      rgb_SetColor(effect4_cnt,0,255,255-effect4_cnt*4,0);
+      rgb_SetColor(0,0,255,255,0);
+      RGB_Show_LED(5);
+    }
+   // for(unsigned char i=0;i<63;i++)
+  else if(effect4_cnt<126)
+    {
+      rgb_SetColor(0,0,255,0,0);
+      rgb_SetColor(effect4_cnt-63,0,255,0,(effect4_cnt-63)*4);
+      RGB_Show_LED(5);
+    }
+    
+   // for(unsigned char i=0;i<63;i++) 
+  else if(effect4_cnt<189)
+    {
+      rgb_SetColor(0,0,255,0,255);
+      rgb_SetColor((effect4_cnt-126),0,255-(effect4_cnt-126)*4,0,255);
+      RGB_Show_LED(5);
+    }
+   // for(unsigned char i=0;i<63;i++) 
+  else if(effect4_cnt<252)
+    {
+      rgb_SetColor(0,0,0,0,255);
+      rgb_SetColor((effect4_cnt-189),0,0,(effect4_cnt-189)*4,255);
+      RGB_Show_LED(5);
+    }
+    
+   // for(unsigned char i=0;i<60;i++)
+  else if(effect4_cnt<315)
+    {
+      rgb_SetColor(0,0,0,255,255);
+      rgb_SetColor((effect4_cnt-252),0,0,255,255-(effect4_cnt-252)*4);
+      RGB_Show_LED(5);
+    }
+    //for(unsigned char i=0;i<60;i++)
+  else if(effect4_cnt<378)
+    {       rgb_SetColor(0,0,0,255,0);
+      rgb_SetColor((effect4_cnt-315),0,(effect4_cnt-315)*4,255,0);
+      RGB_Show_LED(5);
+    }
+    effect4_cnt++;    // Hieu ung 4 counterz
 }
 
  void effect_5 () //  day led
 {
-      for(int i=0;i<60;i++)
-      { 
-        rgb_SetColor(i,0,255,0,110);  // 7 do 3 xanh
-      } 
-              RGB_Show_LED(5); 
+    mode_effect_save=mode_effect;
+    RGB_Clear_LED(); //  xoa het LED
+    for(unsigned char i=0;i<30;i++) // dich led roi gui ra
+    rgb_SetColor(i,0,255,0,0);  //dat 30 led mau do
+    RGB_effect_5_forward(30,6);
+
+    RGB_Clear_LED();
+    for(unsigned char i=0;i<31;i++) // ...
+    rgb_SetColor(60-i,0,0,255,0);
+    RGB_effect_5_reverb(30,6); 
+
+    RGB_Clear_LED();
+    for(unsigned char i=0;i<30;i++)
+    rgb_SetColor(i,0,0,0,255);   
+    RGB_effect_5_forward(30,6);
+
+    RGB_Clear_LED();
+    for(unsigned char i=0;i<31;i++)
+    rgb_SetColor(60-i,0,130,130,0);
+    RGB_effect_5_reverb(30,6);
+
+    RGB_Clear_LED();
+    for(unsigned char i=0;i<30;i++)
+    rgb_SetColor(i,0,0,130,130); 
+    RGB_effect_5_forward(30,6);
+
+    RGB_Clear_LED();
+    for(unsigned char i=0;i<31;i++)
+    rgb_SetColor(60-i,0,130,0,130);    
+    RGB_effect_5_reverb(30,6);
 }
 
 void effect_6 () 
